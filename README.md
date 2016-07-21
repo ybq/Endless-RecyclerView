@@ -18,7 +18,7 @@
 
  ```gradle
 dependencies {
-    compile 'com.github.ybq:Endless-RecyclerView:1.0.1'
+    compile 'com.github.ybq:Endless-RecyclerView:1.0.2'
  }
 ```
 
