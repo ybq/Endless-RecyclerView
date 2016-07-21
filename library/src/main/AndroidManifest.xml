@@ -1,4 +1,3 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.github.ybq.library">
+<manifest package="com.github.ybq.endless">
 
 </manifest>
