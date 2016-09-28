@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+@SuppressWarnings("unchecked")
 public abstract class EndlessAdapter<LVH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter {
     private final int TYPE_LOAD_MORE = 101;
     private boolean loading;
@@ -24,10 +25,9 @@ public abstract class EndlessAdapter<LVH extends RecyclerView.ViewHolder> extend
 
     @Override
     public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        //noinspection StatementWithEmptyBody
         if (loading && getItemViewType(position) == TYPE_LOAD_MORE) {
-            //// TODO:
         } else {
-            //noinspection unchecked
             onBindHolder((LVH) holder, position);
         }
     }
@@ -89,20 +89,70 @@ public abstract class EndlessAdapter<LVH extends RecyclerView.ViewHolder> extend
 
             @Override
             public void onBindHolder(RecyclerView.ViewHolder holder, int position) {
-                //noinspection unchecked
                 adapter.onBindViewHolder(holder, position);
+            }
+
+            @Override
+            public long getItemId(int position) {
+                return adapter.getItemId(position);
+            }
+
+
+            @Override
+            public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+                adapter.onDetachedFromRecyclerView(recyclerView);
+            }
+
+            @Override
+            public void registerAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+                super.registerAdapterDataObserver(observer);
+                adapter.registerAdapterDataObserver(observer);
+            }
+
+            @Override
+            public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+                super.unregisterAdapterDataObserver(observer);
+                adapter.unregisterAdapterDataObserver(observer);
+            }
+
+            @Override
+            public void setHasStableIds(boolean hasStableIds) {
+                super.setHasStableIds(hasStableIds);
+                adapter.setHasStableIds(hasStableIds);
+            }
+
+            @Override
+            public void onViewRecycled(RecyclerView.ViewHolder holder) {
+                super.onViewRecycled(holder);
+                adapter.onViewRecycled(holder);
+            }
+
+            @Override
+            public boolean onFailedToRecycleView(RecyclerView.ViewHolder holder) {
+                return adapter.onFailedToRecycleView(holder);
+            }
+
+            @Override
+            public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+                adapter.onViewAttachedToWindow(holder);
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
+                adapter.onViewDetachedFromWindow(holder);
+            }
+
+            @Override
+            public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+                adapter.onAttachedToRecyclerView(recyclerView);
             }
         };
     }
 
 
     class LoadMoreHolder extends RecyclerView.ViewHolder {
-
         public LoadMoreHolder(View itemView) {
             super(itemView);
-            itemView.setLayoutParams(
-                    new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
         }
     }
 

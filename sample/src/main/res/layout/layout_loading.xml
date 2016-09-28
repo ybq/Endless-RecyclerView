@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="6dp">
-    <!--
-            app:SpinKit_Color="@color/colorAccent" -->
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
     <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/spin_kit"
-        style="@style/SpinKitView.Small.Circle"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        style="@style/SpinKitView.Small.MultiplePulse"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="center"
-        app:SpinKit_Color="#000000" />
+        app:SpinKit_Color="@color/colorAccent" />
+
 </FrameLayout>

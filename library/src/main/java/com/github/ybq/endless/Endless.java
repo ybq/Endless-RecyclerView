@@ -74,8 +74,8 @@ public class Endless {
                     @Override
                     public void run() {
                         if (loadMoreAvailable && loadMoreListener != null && !mAdapter.isLoading()) {
-                            loadMoreListener.onLoadMore(currentPage);
                             mAdapter.setLoading(true);
+                            loadMoreListener.onLoadMore(currentPage);
                         }
                     }
                 });
@@ -105,6 +105,9 @@ public class Endless {
 
 
     public void setAdapter(RecyclerView.Adapter adapter) {
+        if (adapter == null) {
+            return;
+        }
         if (adapter instanceof EndlessAdapter) {
             recyclerView.setAdapter(adapter);
         }

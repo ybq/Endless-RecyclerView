@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.github.ybq.endless.Endless;
 
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Integer> data;
     private Endless endless;
     private TextAdapter textAdapter;
+    private AsyncTask asyncTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +28,13 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(textAdapter = new TextAdapter());
+
         View loadingView = View.inflate(this, R.layout.layout_loading, null);
+        loadingView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         endless = Endless.applyTo(recyclerView,
                 loadingView
         );
+        endless.setAdapter(textAdapter = new TextAdapter());
         endless.setLoadMoreListener(new Endless.LoadMoreListener() {
             @Override
             public void onLoadMore(int page) {
@@ -40,13 +44,21 @@ public class MainActivity extends AppCompatActivity {
         loadData(0);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (asyncTask != null) {
+            asyncTask.cancel(true);
+        }
+    }
+
     private void loadData(final int page) {
-        new AsyncTask<Integer, Integer, List<Integer>>() {
+        asyncTask = new AsyncTask<Integer, Integer, List<Integer>>() {
             @Override
             protected List<Integer> doInBackground(Integer[] integers) {
                 if (page != 0) {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
