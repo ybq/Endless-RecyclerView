@@ -1,21 +1,35 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 24
+        targetSdkVersion 26
     }
     buildTypes {
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        abortOnError false
+    }
+}
+publish {
+    userOrg = 'ybq'
+    groupId = 'com.github.ybq'
+    artifactId = 'Endless-RecyclerView'
+    publishVersion = '1.0.4'
+    desc = 'Endless support for RecyclerView'
+    website = 'https://github.com/ybq/Endless-RecyclerView'
 }
 
+
 dependencies {
-    provided 'com.android.support:recyclerview-v7:24.+'
+    compileOnly 'com.android.support:recyclerview-v7:28.0.0'
 }

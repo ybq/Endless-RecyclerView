@@ -3,6 +3,7 @@ package com.github.ybq.endless_recyclerview;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -15,7 +16,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private List<Integer> data;
+    private List<DataProvider.Item> data;
     private Endless endless;
     private TextAdapter textAdapter;
     private AsyncTask asyncTask;
@@ -24,11 +25,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-
+        recyclerView = findViewById(R.id.recycler_view);
+        final GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (position == textAdapter.getItemCount()) {
+                    return layoutManager.getSpanCount();
+                }
+                return 1;
+            }
+        });
         View loadingView = View.inflate(this, R.layout.layout_loading, null);
         loadingView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         endless = Endless.applyTo(recyclerView,
@@ -53,9 +62,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadData(final int page) {
-        asyncTask = new AsyncTask<Integer, Integer, List<Integer>>() {
+        asyncTask = new AsyncTask<Integer, Integer, List<DataProvider.Item>>() {
             @Override
-            protected List<Integer> doInBackground(Integer[] integers) {
+            protected List<DataProvider.Item> doInBackground(Integer[] integers) {
                 if (page != 0) {
                     try {
                         Thread.sleep(2000);
@@ -63,11 +72,11 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                return DataProvider.request(integers[0], 28);
+                return DataProvider.request(integers[0], 71);
             }
 
             @Override
-            protected void onPostExecute(List<Integer> integers) {
+            protected void onPostExecute(List<DataProvider.Item> integers) {
                 data = integers;
                 if (page == 0) {
                     textAdapter.setData(data);
